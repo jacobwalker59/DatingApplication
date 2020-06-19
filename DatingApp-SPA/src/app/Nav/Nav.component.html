@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class='container'>
+        <a class="navbar-brand" [routerLink]="['/home']">Dating App</a>
+
+        <ul class="navbar-nav mr-auto" *ngIf="loggedIn()">
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/members']">Matches</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/lists']">Lists</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/messages']">Messages</a>
+            </li>
+
+        </ul>
+
+        <div *ngIf="loggedIn()" class="dropdown" dropdown>
+            <span class="mr-1">
+                <img src ="{{photoUrl  || '../../assets/user.png'}}">
+            </span>
+            <a class=" dropdown-toggle text-light" dropdownToggle>
+            Welcome {{authService.decodedToken?.unique_name | titlecase}}
+            </a>
+            <div class="dropdown-menu mt-3" aria-labelledby="dropdownMenuButton" *dropdownMenu>
+                <a class="dropdown-item" routerLinkActive="active" [routerLink]="['/member/edit']"><i class="fa fa-user"></i>Edit Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out" ></i>Logout</a>
+            </div>
+        </div>
+
+        <!-- using a template reference variable below using the #, the other type is a reactive form,
+        forms have to be imported in the app-module ts class a-ngModel gets the capacity to bind, make sure that the
+      model your using is already stored as an object within the respective ts class, its the same as what youve done in 
+      c#, likewise for ng-submit event, passing the form the submit method here which again is linked to our class
+    the same as passing it in c# to a method which contains a DTO
+    
+    angular uses the name field to assing each on to respective model, 
+    so keeping the same as the object variables makes sense
+      
+    #username="ngModel" letting you use it outside of the scope
+    
+    you have a bunch of things for eahc form such as valid, if the name of something isnt valid,
+    you can disable its use
+    
+    -->
+
+        <form *ngIf="!loggedIn()" #loginForm="ngForm" class="form-inline my-2 my-lg-0" (ngSubmit)="login()">
+            <input class="form-control mr-sm-2" type="text" name="Username" placeholder="Username" required [(ngModel)]="model.Username" #username="ngModel">
+            <input class="form-control mr-sm-2" type="password" name="Password" placeholder="Password" required [(ngModel)]="model.Password" #password="ngModel">
+            <button [disabled]="!loginForm.valid" class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
+        </form>
+
+
+    </div>
+</nav>
